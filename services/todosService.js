@@ -1,4 +1,6 @@
 import { TodoModel } from "../Models/todoModel.js";
+import { errorHandler } from "../middlewares/errorHandler.js";
+import { logger } from "../middlewares/logger.js";
 
 /** @type {import("express").RequestHandler} */
 export async function createTodo(req, res, next) {
@@ -11,8 +13,7 @@ export async function createTodo(req, res, next) {
 
     return res.status(200).json({ message: "todo created succesfully", todo });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "server error" });
+    errorHandler(err, req, res, next);
   }
 }
 
@@ -23,8 +24,7 @@ export async function fetchTodos(req, res, next) {
 
     return res.status(200).json(todos);
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "server error" });
+    errorHandler(err, req, res, next);
   }
 }
 
@@ -44,7 +44,33 @@ export async function updateTodo(req, res, next) {
       .status(200)
       .json({ message: "todos list updated successfully", updatedTodo });
   } catch (err) {
-    console.log(err);
-    return res.status(500).json({ message: "server error" });
+    errorHandler(err, req, res, next);
+  }
+}
+
+/** @type {import("express").RequestHandler} */
+export async function deleteTodo(req, res, next) {
+  try {
+    const { id } = req.params;
+
+    throw new Error("simulating an error");
+
+    const deletedTodo = await TodoModel.findByIdAndDelete(id);
+
+    console.log(deletedTodo);
+
+    return res.status(200).json({ message: "todo deleted successfully" });
+  } catch (err) {
+    errorHandler(err, req, res, next);
+  }
+}
+
+export async function fetchTodoById(req, res, next) {
+  try {
+    const todo = await TodoModel.findById(req.params.id);
+
+    res.status(200).json(todo);
+  } catch (err) {
+    errorHandler(err, req, res, next);
   }
 }

@@ -4,7 +4,10 @@ import {
   createTodo,
   fetchTodos,
   updateTodo,
+  deleteTodo,
+  fetchTodoById,
 } from "../services/todosService.js";
+import { logger } from "../middlewares/logger.js";
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -21,6 +24,14 @@ router.get("/todos", (req, res, next) => {
 
 router.put("/todos/:id", (req, res, next) => {
   return updateTodo(req, res, next);
+});
+
+router.delete("/todos/:id", [logger], (req, res, next) => {
+  return deleteTodo(req, res, next);
+});
+
+router.get("/todos/:id", [logger], (req, res, next) => {
+  return fetchTodoById(req, res, next);
 });
 
 export default router;
