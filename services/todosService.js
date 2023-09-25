@@ -72,3 +72,11 @@ export async function fetchTodoById(req, res, next) {
     errorHandler(err, req, res, next);
   }
 }
+
+export const todosService = {
+  fetchTodoById,
+  deleteTodo,
+  updateTodo,
+  fetchTodos,
+  createTodo,
+};
