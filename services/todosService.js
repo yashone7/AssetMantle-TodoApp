@@ -53,8 +53,6 @@ export async function deleteTodo(req, res, next) {
   try {
     const { id } = req.params;
 
-    throw new Error("simulating an error");
-
     const deletedTodo = await TodoModel.findByIdAndDelete(id);
 
     console.log(deletedTodo);
