@@ -2,6 +2,7 @@ import express from "express";
 import { todosService } from "../services/todosService.js";
 import { userService } from "../services/usersService.js";
 import { logger } from "../middlewares/logger.js";
+import { validateToken } from "../middlewares/auth.js";
 const router = express.Router();
 
 router.get("/", (req, res, next) => {
@@ -20,7 +21,8 @@ router.post("/todos", (req, res, next) => {
   return todosService.createTodo(req, res, next);
 });
 
-router.get("/todos", (req, res, next) => {
+// lets make /todos a protected route
+router.get("/todos", [validateToken], (req, res, next) => {
   return todosService.fetchTodos(req, res, next);
 });
 
