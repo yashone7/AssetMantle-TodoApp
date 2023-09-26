@@ -25,13 +25,23 @@ export async function registerUser(req, res, next) {
 
     // unique registration - TODO
 
+    // check if the user already exists and then create the record
+
+    let user = await UserModel.findOne({ email });
+
+    if (!_.isEmpty(user)) {
+      return res
+        .status(400)
+        .json({ message: "user with the email already exists!" });
+    }
+
     const salt = await bcrypt.genSalt(10);
 
     let hashedPassword = await bcrypt.hash(password, salt);
 
     password = hashedPassword;
 
-    const user = await UserModel.create({ email, password, name });
+    user = await UserModel.create({ email, password, name });
 
     return res.status(200).json({ user });
   } catch (err) {
