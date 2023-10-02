@@ -38,7 +38,7 @@ export async function updateTodo(req, res, next) {
 
     console.log(updatedTodoBody);
 
-    const updatedTodo = await TodoModel.updateOne({ _id: id, updatedTodoBody });
+    const updatedTodo = await TodoModel.updateOne({ _id: id }, updatedTodoBody);
 
     return res
       .status(200)
