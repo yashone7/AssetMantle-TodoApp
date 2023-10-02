@@ -107,12 +107,14 @@ export async function validateUserToken(req, res, next) {
 
     jwt.verify(token, JWT_SECRET, (err, obj) => {
       if (err) {
-        return res.status(500).json({ message: "Invalid credentails" });
+        return res.status(401).json({ message: "Invalid credentails" });
       }
 
       return res.status(200).json({ message: "token verified", token });
     });
-  } catch (err) {}
+  } catch (err) {
+    errorHandler(err, req, res, next);
+  }
 }
 
 export const userService = {
