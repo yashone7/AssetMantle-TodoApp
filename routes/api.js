@@ -17,7 +17,8 @@ router.post("/users/login", (req, res, next) => {
   return userService.loginUser(req, res, next);
 });
 
-router.post("/todos", (req, res, next) => {
+// this is a protected
+router.post("/todos", [validateToken], (req, res, next) => {
   return todosService.createTodo(req, res, next);
 });
 
@@ -26,16 +27,20 @@ router.get("/todos", [validateToken], (req, res, next) => {
   return todosService.fetchTodos(req, res, next);
 });
 
-router.put("/todos/:id", (req, res, next) => {
+router.put("/todos/:id", [validateToken], (req, res, next) => {
   return todosService.updateTodo(req, res, next);
 });
 
-router.delete("/todos/:id", [logger], (req, res, next) => {
+router.delete("/todos/:id", [logger, validateToken], (req, res, next) => {
   return todosService.deleteTodo(req, res, next);
 });
 
-router.get("/todos/:id", [logger], (req, res, next) => {
+router.get("/todos/:id", [logger, validateToken], (req, res, next) => {
   return todosService.fetchTodoById(req, res, next);
+});
+
+router.post("/user/validateToken/:token", (req, res, next) => {
+  return userService.validateUserToken(req, res, next);
 });
 
 export default router;
