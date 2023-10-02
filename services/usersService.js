@@ -98,7 +98,25 @@ export async function loginUser(req, res, next) {
   }
 }
 
+/** @type {import("express").RequestHandler} */
+export async function validateUserToken(req, res, next) {
+  try {
+    const { token } = req.params;
+
+    const JWT_SECRET = process.env.JWT_SECRET;
+
+    jwt.verify(token, JWT_SECRET, (err, obj) => {
+      if (err) {
+        return res.status(500).json({ message: "Invalid credentails" });
+      }
+
+      return res.status(200).json({ message: "token verified", token });
+    });
+  } catch (err) {}
+}
+
 export const userService = {
   registerUser,
   loginUser,
+  validateUserToken,
 };
